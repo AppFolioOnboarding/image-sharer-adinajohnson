@@ -1,4 +1,8 @@
 class ImagesController < ActionController::Base
+  def show
+    @image = Image.find(params[:id])
+  end
+
   def new
     @image = Image.new
   end

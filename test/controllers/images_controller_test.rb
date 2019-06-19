@@ -1,6 +1,16 @@
 require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
+  setup do
+    @image = Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg')
+  end
+
+  def test_show
+    get image_path(@image.id)
+    assert_response :ok
+    assert_select '#header', 'This is your image'
+  end
+
   def test_new
     get new_image_path
     assert_response :ok
