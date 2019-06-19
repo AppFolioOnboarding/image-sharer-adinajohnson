@@ -8,7 +8,7 @@ class ImagesController < ActionController::Base
   end
 
   def create
-    @image = Image.create(image_params)
+    @image = Image.new(image_params)
     if @image.save
       redirect_to image_path(@image), notice: 'Image was successfully created.'
     else
