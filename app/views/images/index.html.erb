@@ -1,5 +1,6 @@
 <h1 class="title" id="header">These are your images</h1>
-
+<a href=<%= new_image_path%>>  feel free to add a new one</a>
+<br>
 <% @images.each do |i| %>
   <%= image_tag(i.url, class: "img-max-width") %>
 <% end %>
