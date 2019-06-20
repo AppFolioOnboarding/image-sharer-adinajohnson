@@ -1,4 +1,4 @@
-class ImagesController < ActionController::Base
+class ImagesController < ApplicationController
   def show
     @image = Image.find(params[:id])
   end
@@ -14,6 +14,10 @@ class ImagesController < ActionController::Base
     else
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def index
+    @images = Image.order(created_at: :desc)
   end
 
   private
