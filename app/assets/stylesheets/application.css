@@ -13,3 +13,6 @@
  *= require_tree .
  *= require_self
  */
+ .img-max-width {
+  max-width:400px;
+}
