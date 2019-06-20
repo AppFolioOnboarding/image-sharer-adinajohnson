@@ -35,4 +35,31 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :unprocessable_entity
   end
+
+  def test_index
+    get images_path
+
+    assert_response :ok
+    assert_select '#header', 'These are your images'
+    assert_select 'img', count: 1
+    assert_select 'img[src=?]', 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg'
+  end
+
+  def test_index_order
+    @image.destroy
+    urls = ['http://', 'https://', 'http://i']
+    urls.each do |url|
+      Image.create!(url: url)
+    end
+    urls = urls.reverse
+
+    get images_path
+
+    assert_select 'img', count: 3
+    assert_select 'img' do |images|
+      images.each_with_index do |image, idx|
+        assert_equal image.attribute('src').value, urls[idx]
+      end
+    end
+  end
 end

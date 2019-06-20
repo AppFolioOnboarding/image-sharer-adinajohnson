@@ -16,6 +16,10 @@ class ImagesController < ActionController::Base
     end
   end
 
+  def index
+    @images = Image.order(created_at: :desc)
+  end
+
   private
 
   def image_params
