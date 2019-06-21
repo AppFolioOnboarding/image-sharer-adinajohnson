@@ -15,6 +15,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get new_image_path
     assert_response :ok
     assert_select '#header', 'Enter an image url'
+    assert_select 'label', 'Tag list'
   end
 
   def test_create__succeed
