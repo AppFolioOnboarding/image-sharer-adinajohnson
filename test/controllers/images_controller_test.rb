@@ -52,6 +52,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '#header', 'These are your images'
     assert_select 'img', count: 1
     assert_select 'img[src=?]', 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg'
+    assert_select '.js-tags' do |tags|
+      assert_equal 'dog woof pup', tags.text.squish
+    end
   end
 
   def test_index_order
