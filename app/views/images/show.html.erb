@@ -8,3 +8,9 @@
 <br>
 
 <%= image_tag(@image.url, class: "img-max-width") %>
+<br>
+<div id="js-tags">
+    <% @image.tag_list.each do |tag|  %>
+        <%=  tag %>
+    <% end %>
+</div>

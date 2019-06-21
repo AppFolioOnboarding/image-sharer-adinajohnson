@@ -9,6 +9,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get image_path(@image.id)
     assert_response :ok
     assert_select '#header', 'This is your image'
+    assert_select '#js-tags' do |tags|
+      assert_equal 'dog woof pup', tags.text.squish
+    end
   end
 
   def test_new
