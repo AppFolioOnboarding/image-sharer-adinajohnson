@@ -2,29 +2,38 @@ require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @image = Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg')
+    @image = Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg', tag_list: 'dog, woof, pup')
   end
 
   def test_show
     get image_path(@image.id)
     assert_response :ok
     assert_select '#header', 'This is your image'
+    assert_select '#js-tags' do |tags|
+      assert_equal 'dog woof pup', tags.text.squish
+    end
   end
 
   def test_new
     get new_image_path
     assert_response :ok
     assert_select '#header', 'Enter an image url'
+    assert_select 'label', 'Tag list'
   end
 
   def test_create__succeed
     assert_difference('Image.count', 1) do
-      image_params = { url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg' }
+      image_params = {
+        url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg',
+        tag_list: 'dog, woof, pup'
+      }
+
       post images_path, params: { image: image_params }
     end
 
     assert_redirected_to image_path(Image.last)
     assert_equal 'Image was successfully created.', flash[:notice]
+    assert_equal Image.last.tag_list, ['dog', 'woof', 'pup']
   end
 
   def test_create__fail
@@ -43,6 +52,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '#header', 'These are your images'
     assert_select 'img', count: 1
     assert_select 'img[src=?]', 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg'
+    assert_select '.js-tags' do |tags|
+      assert_equal 'dog woof pup', tags.text.squish
+    end
   end
 
   def test_index_order
