@@ -15,6 +15,10 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '#js-tags' do |tags|
       assert_equal 'dog woof pup', tags.text.squish
     end
+    assert_select 'a[href=?]', image_path(@image),
+                  text: 'DESTROY!!!!!!!',
+                  method: :destroy,
+                  data:   { confirm: 'Are you sure?' }
   end
 
   def test_new
@@ -96,5 +100,18 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
         assert_equal image.attribute('src').value, urls[idx]
       end
     end
+  end
+
+  def test_destroy
+    assert_difference('Image.count', -1) do
+      delete image_path(@image.id)
+    end
+
+    assert_redirected_to images_path
+    assert_equal 'Image was successfully deleted.', flash[:notice]
+
+    get images_path
+
+    assert_select 'img', count: 0
   end
 end
