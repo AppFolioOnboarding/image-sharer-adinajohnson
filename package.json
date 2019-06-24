@@ -8,8 +8,9 @@
     "babel-preset-stage-1": "^6.24.1",
     "coffeescript": "1.12.7",
     "prop-types": "^15.6.1",
-    "react": "^16.8.4",
-    "react-dom": "^16.8.4"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "reactstrap": "^8.0.0"
   },
   "devDependencies": {
     "assert": "^1.4.1",
