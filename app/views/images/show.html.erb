@@ -14,3 +14,5 @@
         <%=  tag %>
     <% end %>
 </div>
+<br>
+<%=  link_to 'DESTROY!!!!!!!',  { action: :destroy, id: @image.id }, method: :delete, data: { confirm: 'Are you sure?' } %>

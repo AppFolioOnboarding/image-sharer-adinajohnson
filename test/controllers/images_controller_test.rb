@@ -15,6 +15,10 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '#js-tags' do |tags|
       assert_equal 'dog woof pup', tags.text.squish
     end
+    assert_select 'a[href=?]', image_path(@image),
+                  text: 'DESTROY!!!!!!!',
+                  method: :destroy,
+                  data:   { confirm: 'Are you sure?' }
   end
 
   def test_new
@@ -58,7 +62,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.js-tags' do |tags|
       assert_equal 'dog woof pup', tags.text.squish
     end
+  end
 
+  def test_index_tag_filtering
     Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg',
                   tag_list: 'dog, pup')
     get images_path
@@ -68,6 +74,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     get images_path(tag: 'woof')
 
     assert_select 'img', count: 1
+  end
+
+  def test_index_redirect_to_show
+    @image2 = Image.create!(url: 'https://', tag_list: 'dog, pup')
+    get images_path
+
+    assert_select 'a[href=?]', "/images/#{@image.id}"
+    assert_select 'a[href=?]', "/images/#{@image2.id}"
   end
 
   def test_index_order
@@ -86,5 +100,18 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
         assert_equal image.attribute('src').value, urls[idx]
       end
     end
+  end
+
+  def test_destroy
+    assert_difference('Image.count', -1) do
+      delete image_path(@image.id)
+    end
+
+    assert_redirected_to images_path
+    assert_equal 'Image was successfully deleted.', flash[:notice]
+
+    get images_path
+
+    assert_select 'img', count: 0
   end
 end
