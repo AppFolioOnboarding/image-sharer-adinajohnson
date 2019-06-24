@@ -58,7 +58,9 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.js-tags' do |tags|
       assert_equal 'dog woof pup', tags.text.squish
     end
+  end
 
+  def test_index_tag_filtering
     Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg',
                   tag_list: 'dog, pup')
     get images_path
