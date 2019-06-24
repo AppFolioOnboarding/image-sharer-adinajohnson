@@ -70,6 +70,14 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select 'img', count: 1
   end
 
+  def test_index_redirect_to_show
+    @image2 = Image.create!(url: 'https://', tag_list: 'dog, pup')
+    get images_path
+
+    assert_select 'a[href=?]', "/images/#{@image.id}"
+    assert_select 'a[href=?]', "/images/#{@image2.id}"
+  end
+
   def test_index_order
     @image.destroy
     urls = ['http://', 'https://', 'http://i']
