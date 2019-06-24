@@ -2,7 +2,10 @@ require 'test_helper'
 
 class ImagesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @image = Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg', tag_list: 'dog, woof, pup')
+    @image = Image.create!(
+      url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg',
+      tag_list: 'dog, woof, pup'
+    )
   end
 
   def test_show
@@ -33,7 +36,7 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
 
     assert_redirected_to image_path(Image.last)
     assert_equal 'Image was successfully created.', flash[:notice]
-    assert_equal Image.last.tag_list, ['dog', 'woof', 'pup']
+    assert_equal Image.last.tag_list, %w[dog woof pup]
   end
 
   def test_create__fail
@@ -55,6 +58,16 @@ class ImagesControllerTest < ActionDispatch::IntegrationTest
     assert_select '.js-tags' do |tags|
       assert_equal 'dog woof pup', tags.text.squish
     end
+
+    Image.create!(url: 'https://pbs.twimg.com/profile_images/962170088941019136/lgpCD8X4_400x400.jpg',
+                  tag_list: 'dog, pup')
+    get images_path
+
+    assert_select 'img', count: 2
+
+    get images_path(tag: 'woof')
+
+    assert_select 'img', count: 1
   end
 
   def test_index_order
