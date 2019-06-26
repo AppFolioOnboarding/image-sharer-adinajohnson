@@ -8,9 +8,9 @@ import Footer from '../../components/Footer';
 describe('<Footer />', () => {
   it('should render correctly', () => {
     const wrapper = shallow(<Footer />);
-    const div = wrapper.find('div');
+    const footer = wrapper.find('footer');
 
-    assert.strictEqual(div.length, 1);
-    assert.strictEqual(div.text(), 'Copyright: Appfolio Inc. Onboarding');
+    assert.strictEqual(footer.length, 1);
+    assert.strictEqual(footer.text(), 'Copyright: Appfolio Inc. Onboarding');
   });
 });
